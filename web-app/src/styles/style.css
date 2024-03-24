@@ -1,0 +1,14 @@
+/* clock */
+body{
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    height: 100vh;
+    line-height: 100vh;
+    /* padding: 70px 0; */
+    time{
+        font-size: 22vw;
+        vertical-align: middle;
+        
+    }
+}

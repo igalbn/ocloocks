@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="description" content=""/>
+        <meta name="keywords" content=""/>
+        <meta name="author" content="Igal"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⌚</text></svg>"/>
+        <title>Ocloocks - Pyodide</title>
+
+        <style>
+            time{
+                font-size: 15vw;
+            }
+        </style>
+
+        <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
+    </head>
+
+    <body>
+        <div id="app">
+            <time id="clock-time">Loading</time>
+        </div>
+    </body>
+
+    <script>
+        const ONE_SECOND = 1000;
+        const loadPyLibraries = `
+import time
+import js         
+        `;
+        const clockPy =
+        `
+current_time = time.strftime("%H:%M:%S", time.localtime())
+js.document.getElementById('clock-time').innerText = current_time
+`;
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Ocloocks');
+
+            main();
+        });
+
+        async function main(){
+            let pyodide = await loadPyodide();
+            console.log('v');
+            pyodide.runPython(loadPyLibraries);
+            let clockInterval = setInterval(()=>{pyodide.runPython(clockPy);},ONE_SECOND);
+            
+        }
+    </script>
+</html>
