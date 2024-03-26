@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="description" content=""/>
+        <meta name="keywords" content=""/>
+        <meta name="author" content="Igal"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⌚</text></svg>"/>
+        <title>Ocloocks - Pyodide - Read JSON</title>
+
+        <style>
+            body{
+                background-color: chartreuse;
+                time{
+                    font-size: 15vw;
+                }
+            }
+        </style>
+
+        <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
+    </head>
+
+    <body id="body">
+        <div id="app">
+            <time id="clock-time">Loading</time>
+        </div>
+    </body>
+
+    <script>
+        const ONE_SECOND = 1000;
+
+        const loadPyLibraries = `
+import time
+import js 
+import json  
+from pyodide.http import pyfetch  
+import threading
+
+# Need for write to JSON
+from pyodide.ffi import to_js
+from js import Object
+import asyncio
+        `;
+        const readWriteJson = 
+`
+# Read JSON
+with open('colors.json', 'r') as f:
+    pass    
+    data = json.load(f)
+print(data)
+js.document.getElementById('body').style.backgroundColor = data['clock_color']
+`;
+        const clockPy =
+        `
+current_time = time.strftime("%H:%M:%S", time.localtime())
+js.document.getElementById('clock-time').innerText = current_time
+`;
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Ocloocks');
+
+            main();
+        });
+
+        async function main(){
+            const pyodide = await loadPyodide();
+            pyodide.runPython(loadPyLibraries);
+
+            // Reading JSON file
+            // First method - zip
+            // let zipResponse = await fetch("myfiles.zip"); // How can I load external files in Pyodide https://pyodide.org/en/stable/usage/faq.html
+            // let zipBinary = await zipResponse.arrayBuffer();
+            // pyodide.unpackArchive(zipBinary, "zip");
+            
+            //second method - fetch
+            let jsonResponse = await fetch("colors.json");
+            let jsonData = await jsonResponse.json();
+            await pyodide.FS.writeFile("colors.json", JSON.stringify(jsonData));
+            pyodide.runPython(readWriteJson);
+
+            let clockInterval = setInterval(()=>{pyodide.runPython(clockPy);},ONE_SECOND);
+            
+        }
+    </script>
+</html>

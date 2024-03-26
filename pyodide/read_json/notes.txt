@@ -1,0 +1,3 @@
+JSON file can't be loaded directly. It need be loaded from JavaScript to the
+virtual file system. Then it can be used in Python code. Can be done it two 
+ways. By unpacking zip file of loading JSON with fetch or pyodide.FS.writeFile
