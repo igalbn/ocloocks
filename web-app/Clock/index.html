@@ -13,14 +13,19 @@
         <meta property="og:image" content="link"/>
         <title>Ocloocks - Web App - Clock</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⌚</text></svg>"/>
+    <style>
+        body{
+            background-color: aqua;
+        }
+        @font-face {
+            font-family: 'monofonto-rg';
+            src: url('src/fonts/monofonto-rg.otf') format('truetype');
+        }
+    </style>
     </head>
 
     <body>
-         <div id="app-clock">
-            <p data-id="time"></p>
-            <p data-id="date"></p>
-            <p data-id="day"></p>
-            <p data-id="indicator-day"></p>
-         </div>
+        <clock-app></clock-app>
     </body>
+<script src="src/scripts/clock-app/clock-app.js"></script>
 </html>
